@@ -2,6 +2,7 @@ package net.coreprotect.listener.block;
 
 import java.util.Arrays;
 
+import net.coreprotect.CoreProtect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -34,6 +35,9 @@ public final class BlockDispenseListener extends Queue implements Listener {
         Block block = event.getBlock();
         World world = block.getWorld();
         if (!event.isCancelled() && Config.getConfig(world).BLOCK_PLACE) {
+            if (CoreProtect.getLocationExclusions().isExcluded(block.getLocation())) {
+                return;
+            }
             BlockData blockData = block.getBlockData();
             ItemStack item = event.getItem();
             if (item != null && blockData instanceof Dispenser) {

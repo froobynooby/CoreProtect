@@ -18,6 +18,12 @@ public final class CoreProtect extends JavaPlugin {
     private static CoreProtect instance;
     private boolean advancedChestsEnabled = false;
 
+    private static LocationExclusions locationExclusions;
+
+    public static LocationExclusions getLocationExclusions() {
+        return locationExclusions;
+    }
+
     /**
      * Get the instance of CoreProtect
      *
@@ -42,6 +48,7 @@ public final class CoreProtect extends JavaPlugin {
     public void onEnable() {
         // Set plugin instance and data folder path
         instance = this;
+        locationExclusions = new LocationExclusions(this);
         ConfigHandler.path = this.getDataFolder().getPath() + File.separator;
 
         advancedChestsEnabled = getServer().getPluginManager().getPlugin("AdvancedChests") != null;

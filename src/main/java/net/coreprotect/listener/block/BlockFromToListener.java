@@ -1,5 +1,6 @@
 package net.coreprotect.listener.block;
 
+import net.coreprotect.CoreProtect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -26,6 +27,10 @@ public final class BlockFromToListener extends Queue implements Listener {
         Block block = event.getBlock();
         Material type = block.getType(); // old block type
         if (!event.isCancelled()) {
+            if (CoreProtect.getLocationExclusions().isExcluded(block.getLocation())) {
+                return;
+            }
+
             BlockData blockData = block.getBlockData();
             if (blockData instanceof Waterlogged) {
                 Waterlogged waterlogged = (Waterlogged) blockData;

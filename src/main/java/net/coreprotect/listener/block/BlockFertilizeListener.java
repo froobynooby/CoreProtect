@@ -3,6 +3,7 @@ package net.coreprotect.listener.block;
 import java.util.List;
 import java.util.Locale;
 
+import net.coreprotect.CoreProtect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Tag;
@@ -28,6 +29,9 @@ public final class BlockFertilizeListener extends Queue implements Listener {
 
         Block block = event.getBlock();
         if (!Config.getConfig(block.getWorld()).BLOCK_PLACE) {
+            return;
+        }
+        if (CoreProtect.getLocationExclusions().isExcluded(block.getLocation())) {
             return;
         }
 
