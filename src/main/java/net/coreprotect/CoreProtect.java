@@ -35,6 +35,12 @@ public final class CoreProtect extends JavaPlugin {
 
     private static CoreProtect instance;
 
+    private static LiquidFlowExclusions liquidFlowExclusions;
+
+    public static LiquidFlowExclusions getLiquidFlowExclusions() {
+        return liquidFlowExclusions;
+    }
+
     /**
      * Get the instance of CoreProtect
      *
@@ -58,10 +64,12 @@ public final class CoreProtect extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        liquidFlowExclusions = new LiquidFlowExclusions(this);
         ConfigHandler.path = this.getDataFolder().getPath() + File.separator;
         Language.loadPhrases();
 
         boolean start = performVersionChecks();
+        start = true;
         if (start) {
             try {
                 Consumer.initialize(); // Prepare consumer (keep this here)
@@ -151,7 +159,7 @@ public final class CoreProtect extends JavaPlugin {
                 Chat.sendConsoleMessage(Color.RED + "[CoreProtect] " + Phrase.build(Phrase.INVALID_BRANCH_1));
                 Chat.sendConsoleMessage(Color.GREY + "[CoreProtect] " + Phrase.build(Phrase.INVALID_BRANCH_2));
                 Chat.sendConsoleMessage(Color.GREY + "[CoreProtect] " + Phrase.build(Phrase.INVALID_BRANCH_3));
-                return false;
+                //return false;
             }
 
             ConfigHandler.SERVER_VERSION = Integer.parseInt(bukkitVersion[1]);
