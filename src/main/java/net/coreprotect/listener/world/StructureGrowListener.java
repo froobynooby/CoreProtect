@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import net.coreprotect.CoreProtect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Tag;
@@ -23,6 +24,9 @@ public final class StructureGrowListener extends Queue implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     protected void onStructureGrow(StructureGrowEvent event) {
+        if (CoreProtect.getLocationExclusions().isHardExcluded(event.getLocation())) {
+            return;
+        }
         // Event that is called when an organic structure attempts to grow (Sapling -> Tree), (Mushroom -> Huge Mushroom), naturally or using bonemeal.
         TreeType treeType = event.getSpecies();
         String user = "#tree";

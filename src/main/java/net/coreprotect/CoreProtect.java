@@ -35,6 +35,12 @@ public final class CoreProtect extends JavaPlugin {
 
     private static CoreProtect instance;
 
+    private static LocationExclusions locationExclusions;
+
+    public static LocationExclusions getLocationExclusions() {
+        return locationExclusions;
+    }
+
     /**
      * Get the instance of CoreProtect
      *
@@ -58,6 +64,7 @@ public final class CoreProtect extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        locationExclusions = new LocationExclusions(this);
         ConfigHandler.path = this.getDataFolder().getPath() + File.separator;
         Language.loadPhrases();
 
