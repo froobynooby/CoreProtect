@@ -35,10 +35,10 @@ public final class CoreProtect extends JavaPlugin {
 
     private static CoreProtect instance;
 
-    private static LiquidFlowExclusions liquidFlowExclusions;
+    private static LocationExclusions locationExclusions;
 
-    public static LiquidFlowExclusions getLiquidFlowExclusions() {
-        return liquidFlowExclusions;
+    public static LocationExclusions getLocationExclusions() {
+        return locationExclusions;
     }
 
     /**
@@ -64,7 +64,7 @@ public final class CoreProtect extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        liquidFlowExclusions = new LiquidFlowExclusions(this);
+        locationExclusions = new LocationExclusions(this);
         ConfigHandler.path = this.getDataFolder().getPath() + File.separator;
         Language.loadPhrases();
 

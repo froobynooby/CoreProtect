@@ -27,7 +27,7 @@ public final class BlockFromToListener extends Queue implements Listener {
         Block block = event.getBlock();
         Material type = block.getType(); // old block type
         if (!event.isCancelled()) {
-            if (CoreProtect.getLiquidFlowExclusions().isExcluded(block.getLocation())) {
+            if (CoreProtect.getLocationExclusions().isExcluded(block.getLocation())) {
                 return;
             }
 

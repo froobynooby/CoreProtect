@@ -9,11 +9,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LiquidFlowExclusions {
+public class LocationExclusions {
     private final List<ExclusionZone> exclusionZones = new ArrayList<>();
 
-    public LiquidFlowExclusions(CoreProtect coreProtect) {
-        File file = new File(coreProtect.getDataFolder(), "water-exclusions.txt");
+    public LocationExclusions(CoreProtect coreProtect) {
+        File file = new File(coreProtect.getDataFolder(), "exclusion-zones.txt");
         if (file.exists()) {
             try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
                 String line = reader.readLine();
