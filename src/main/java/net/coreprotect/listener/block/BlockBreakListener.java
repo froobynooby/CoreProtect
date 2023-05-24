@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import net.coreprotect.CoreProtect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -334,6 +335,9 @@ public final class BlockBreakListener extends Queue implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     protected void onBlockBreak(BlockBreakEvent event) {
+        if (CoreProtect.getLocationExclusions().isHardExcluded(event.getBlock().getLocation())) {
+            return;
+        }
         if (!event.isCancelled()) {
             String user = event.getPlayer().getName();
             Block block = event.getBlock();
