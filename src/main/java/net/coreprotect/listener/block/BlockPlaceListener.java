@@ -2,6 +2,7 @@ package net.coreprotect.listener.block;
 
 import java.util.Locale;
 
+import net.coreprotect.CoreProtect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -35,6 +36,9 @@ public final class BlockPlaceListener extends Queue implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     protected void onBlockPlace(BlockPlaceEvent event) {
         World world = event.getBlockPlaced().getWorld();
+        if (CoreProtect.getLocationExclusions().isHardExcluded(event.getBlock().getLocation())) {
+            return;
+        }
         if (!event.isCancelled() && Config.getConfig(world).BLOCK_PLACE) {
             Player player = event.getPlayer();
             Block blockPlaced = event.getBlockPlaced();

@@ -26,8 +26,9 @@ public class LocationExclusions {
                         int z1 = Integer.parseInt(split[1].split(",")[1]);
                         int x2 = Integer.parseInt(split[2].split(",")[0]);
                         int z2 = Integer.parseInt(split[2].split(",")[1]);
+                        boolean hard = split.length > 3 && split[3].equalsIgnoreCase("hard");
 
-                        exclusionZones.add(new ExclusionZone(world, x1, x2, z1, z2));
+                        exclusionZones.add(new ExclusionZone(world, x1, x2, z1, z2, hard));
                     }
                     line = reader.readLine();
                 }
@@ -46,16 +47,27 @@ public class LocationExclusions {
         return false;
     }
 
+    public boolean isHardExcluded(Location location) {
+        for (ExclusionZone exclusionZone : exclusionZones) {
+            if (exclusionZone.hard && exclusionZone.contains(location)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private static class ExclusionZone {
         private final String world;
         private final int x1,x2,z1,z2;
+        private final boolean hard;
 
-        private ExclusionZone(String world, int x1, int x2, int z1, int z2) {
+        private ExclusionZone(String world, int x1, int x2, int z1, int z2, boolean hard) {
             this.world = world;
             this.x1 = x1;
             this.x2 = x2;
             this.z1 = z1;
             this.z2 = z2;
+            this.hard = hard;
         }
 
         public boolean contains(Location location) {
