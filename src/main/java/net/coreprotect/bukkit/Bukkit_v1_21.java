@@ -10,6 +10,12 @@ import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.SideChaining;
+import org.bukkit.block.data.type.Shelf;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.inventory.InventoryType;
 
@@ -26,6 +32,7 @@ import net.coreprotect.model.BlockGroup;
 public class Bukkit_v1_21 extends Bukkit_v1_20 implements BukkitInterface {
 
     public static Set<Material> COPPER_CHESTS = new HashSet<>(Arrays.asList());
+    public static Set<Material> SHELVES = new HashSet<>(Arrays.asList());
 
     /**
      * Initializes the Bukkit_v1_21 adapter with 1.21-specific block groups and mappings.
@@ -37,6 +44,8 @@ public class Bukkit_v1_21 extends Bukkit_v1_20 implements BukkitInterface {
         BlockGroup.INTERACT_BLOCKS.addAll(copperChestMaterials());
         BlockGroup.CONTAINERS.addAll(copperChestMaterials());
         BlockGroup.UPDATE_STATE.addAll(copperChestMaterials());
+        BlockGroup.CONTAINERS.addAll(shelfMaterials());
+        BlockGroup.UPDATE_STATE.addAll(shelfMaterials());
     }
 
     /**
@@ -197,5 +206,64 @@ public class Bukkit_v1_21 extends Bukkit_v1_20 implements BukkitInterface {
         }
 
         return COPPER_CHESTS;
+    }
+
+    @Override
+    public boolean isShelf(Material material) {
+        return SHELVES.contains(material);
+    }
+
+    @Override
+    public Set<Material> shelfMaterials() {
+        if (SHELVES.isEmpty()) {
+            Material oakShelf = Material.getMaterial("OAK_SHELF");
+            if (oakShelf != null) {
+                SHELVES.add(Material.getMaterial("ACACIA_SHELF"));
+                SHELVES.add(Material.getMaterial("BAMBOO_SHELF"));
+                SHELVES.add(Material.getMaterial("BIRCH_SHELF"));
+                SHELVES.add(Material.getMaterial("CHERRY_SHELF"));
+                SHELVES.add(Material.getMaterial("CRIMSON_SHELF"));
+                SHELVES.add(Material.getMaterial("DARK_OAK_SHELF"));
+                SHELVES.add(Material.getMaterial("JUNGLE_SHELF"));
+                SHELVES.add(Material.getMaterial("MANGROVE_SHELF"));
+                SHELVES.add(Material.getMaterial("OAK_SHELF"));
+                SHELVES.add(Material.getMaterial("PALE_OAK_SHELF"));
+                SHELVES.add(Material.getMaterial("SPRUCE_SHELF"));
+                SHELVES.add(Material.getMaterial("WARPED_SHELF"));
+            }
+        }
+        return SHELVES;
+    }
+
+    @Override
+    public Set<Block> getConnectedShelves(Block block) {
+        return getConnectedShelves(block, null);
+    }
+
+    private Set<Block> getConnectedShelves(Block block, Location previousBlock) {
+        BlockData blockData = block.getBlockData();
+        Set<Block> connectedShelves = new HashSet<>();
+        connectedShelves.add(block);
+        if (blockData instanceof Shelf) {
+            Shelf shelf = (Shelf)blockData;
+            if (!shelf.getSideChain().equals(SideChaining.ChainPart.UNCONNECTED)) {
+                BlockFace facing = shelf.getFacing();
+                Block left = block.getRelative(-facing.getModZ(), 0, facing.getModX());
+                Block right = block.getRelative(facing.getModZ(), 0, -facing.getModX());
+
+                if (shelf.getSideChain().equals(SideChaining.ChainPart.LEFT) || shelf.getSideChain().equals(SideChaining.ChainPart.CENTER)) {
+                    if (!right.getLocation().equals(previousBlock)) {
+                        connectedShelves.addAll(getConnectedShelves(right, block.getLocation()));
+                    }
+                }
+                if (shelf.getSideChain().equals(SideChaining.ChainPart.RIGHT) || shelf.getSideChain().equals(SideChaining.ChainPart.CENTER)) {
+                    if (!left.getLocation().equals(previousBlock)) {
+                        connectedShelves.addAll(getConnectedShelves(left, block.getLocation()));
+                    }
+                }
+            }
+        }
+        return connectedShelves;
+
     }
 }

@@ -370,4 +370,18 @@ public class BukkitAdapter implements BukkitInterface {
     public Set<Material> copperChestMaterials() {
         return EMPTY_SET;
     }
+
+    @Override
+    public boolean isShelf(Material material) {
+        return false;
+    }
+
+    @Override
+    public Set<Material> shelfMaterials() {
+        return EMPTY_SET;
+    }
+
+    @Override
+    public Set<Block> getConnectedShelves(Block block) { return new HashSet<>(); }
+
 }
